@@ -49,52 +49,43 @@ heuristic = {'San Bernardino': 4,
 # returning empty solution with empty expanded cities. You can remove the current return statement and 
 # implement your code to complete the functions.
 class SearchAlgorithms:
+    """
+    Search the shallowest nodes in the search tree first.
+    Your search algorithm needs to return (i) a list of cities the algorithm will propose to go to to reach the
+    goal, and (ii) set of expanded cities (visited nodes). Make sure to implement a graph search algorithm.
+    """
     def breadthFirstSearch(self, start, goal, graph):
-        """
-        Search the shallowest nodes in the search tree first.
+        visited: list = [start]
+        queue: list = [(start, [start])]
 
-        Your search algorithm needs to return (i) a list of cities the algorithm will propose to go to to reach the
-        goal, and (ii) set of expanded cities (visited nodes). Make sure to implement a graph search algorithm.
-
-        """
-
-        "*** YOUR CODE HERE ***"
-        #fringe = graph.get(start)
-        visited: list = []
-        children = reversed(graph[child])
-        queue = [(start, [start])]
-
-        while queue:
-            node,path = queue.pop(0)
-            if node == goal:
-                return path;
-            if node not in visited:
-                visited.add(node)
-                for neighbor in graph(node):
-                    queue.append((child, path + [child]))
+        while queue: #while any fringe node on the current depth can be expanded
+            currentNode, currentNodePath = queue.pop(0) # start expansion of leftmost node in current depth
+            if currentNode == goal:
+                return currentNodePath
+            for neighbor in graph[currentNode]:
+                if neighbor not in visited:
+                    visited.append(neighbor)
+                    queue.append((neighbor, currentNodePath + [neighbor])) # queue this node for expansion and give its path
         return []
 
-        # You can delete the line below once you have implemented your solution above
-        # return {"Returned solution: [], Expanded cities: []"}
 
+    """
+    Search the deepest nodes in the search tree first.
+    Your search algorithm needs to return (i) a list of cities the algorithm will propose to go to to reach the
+    goal, and (ii) set of expanded cities (visited nodes). Make sure to implement a graph search algorithm.
+    Please be very careful when you expand the neighbor nodes in your code when using stack. In case of using 
+    normal list or a data structure other than the Stack, you might need to reverse the order of the neighbor nodes
+    before you push them in the stack to get correct results 
+    """
     def depthFirstSearch(self, start, goal, graph):
-        """
-        Search the deepest nodes in the search tree first.
+        visited: list = [start]
+        stack: list = [(start, [start])]
 
-        Your search algorithm needs to return (i) a list of cities the algorithm will propose to go to to reach the
-        goal, and (ii) set of expanded cities (visited nodes). Make sure to implement a graph search algorithm.
-
-        Please be very careful when you expand the neighbor nodes in your code when using stack. In case of using 
-        normal list or a data structure other than the Stack, you might need to reverse the order of the neighbor nodes
-        before you push them in the stack to get correct results 
-
-        """
-        "*** YOUR CODE HERE ***"
+        while stack: #while any fringe node CONTINUE HERE
 
         # You can delete the line below once you have implemented your solution above
-        return {"Returned solution: [], Expanded cities: []"}
+        #return {"Returned solution: [], Expanded cities: []"}
             
-
     def uniformCostSearch(self, start, goal, graph, weights):
         """Search the node of least total cost first.
         Important things to remember
