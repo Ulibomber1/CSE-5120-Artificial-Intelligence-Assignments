@@ -55,17 +55,17 @@ class SearchAlgorithms:
     goal, and (ii) set of expanded cities (visited nodes). Make sure to implement a graph search algorithm.
     """
     def breadthFirstSearch(self, start, goal, graph):
-        visited: list = [start]
+        expanded: list = []
         queue: list = [(start, [start])]
 
-        while queue: #while any fringe node on the current depth can be expanded
-            currentNode, currentNodePath = queue.pop(0) # start expansion of leftmost node in current depth
+        while queue: # while any fringe node of shallowest depth can be expanded
+            currentNode, currentNodePath = queue.pop(0) # start expansion of shallowest, leftmost node
             if currentNode == goal:
                 return currentNodePath
-            for neighbor in graph[currentNode]:
-                if neighbor not in visited:
-                    visited.append(neighbor)
-                    queue.append((neighbor, currentNodePath + [neighbor])) # queue this node for expansion and give its path
+            if currentNode not in expanded:
+                expanded.append(currentNode)
+                for neighbor in graph[currentNode]: # from left to right, put unexpanded nodes in the queue with their paths
+                    queue.append((neighbor, currentNodePath + [neighbor])) 
         return []
 
 
@@ -78,10 +78,18 @@ class SearchAlgorithms:
     before you push them in the stack to get correct results 
     """
     def depthFirstSearch(self, start, goal, graph):
-        visited: list = [start]
+        expanded: list = []
         stack: list = [(start, [start])]
 
-        while stack: #while any fringe node CONTINUE HERE
+        while stack: # while any fringe node of deepest depth can be expanded
+            currentNode, currentNodePath = stack.pop() # start expansion of deepest, leftmost node
+            if currentNode == goal:
+                return currentNodePath
+            if currentNode not in expanded:
+                expanded.append(currentNode)
+                for neighbor in reversed(graph[currentNode]): # from right to left, put unexpanded nodes in the stack with their paths
+                    stack.append((neighbor, currentNodePath + [neighbor])) 
+        return []
 
         # You can delete the line below once you have implemented your solution above
         #return {"Returned solution: [], Expanded cities: []"}
