@@ -58,13 +58,13 @@ class SearchAlgorithms:
         expanded: list = []
         queue: list = [(start, [start])]
 
-        while queue: # while any fringe node of shallowest depth can be expanded
+        while queue: # while the queue has items in it
             currentNode, currentNodePath = queue.pop(0) # start expansion of shallowest, leftmost node
             if currentNode == goal:
                 return currentNodePath
             if currentNode not in expanded:
                 expanded.append(currentNode)
-                for neighbor in graph[currentNode]: # from left to right, put unexpanded nodes in the queue with their paths
+                for neighbor in graph[currentNode]: # from left to right, put neighboring nodes in the queue with their paths
                     queue.append((neighbor, currentNodePath + [neighbor])) 
         return []
 
@@ -81,34 +81,45 @@ class SearchAlgorithms:
         expanded: list = []
         stack: list = [(start, [start])]
 
-        while stack: # while any fringe node of deepest depth can be expanded
+        while stack: # while the stack has items in it
             currentNode, currentNodePath = stack.pop() # start expansion of deepest, leftmost node
             if currentNode == goal:
                 return currentNodePath
             if currentNode not in expanded:
                 expanded.append(currentNode)
-                for neighbor in reversed(graph[currentNode]): # from right to left, put unexpanded nodes in the stack with their paths
+                for neighbor in reversed(graph[currentNode]): # from right to left, put neighboring nodes in the stack with their paths
                     stack.append((neighbor, currentNodePath + [neighbor])) 
         return []
-
-        # You can delete the line below once you have implemented your solution above
-        #return {"Returned solution: [], Expanded cities: []"}
-            
+    
+        
+    """
+    Search the node of least total cost first.
+    Important things to remember
+    1 - Use PriorityQueue with .put() and .get() functions
+    2 - In addition to putting the start or current node in the queue, also put the cost (g(n)) using weights data structure
+    3 - When you're expanding the neighbor of the current you're standing at, get its g(neighbor) by weights[(node, neighbor)] 
+    4 - Calling weights[(node, neighbor)] may throw KeyError exception which is due to the fact that the weights data structure
+        only has one directional weights. In the class, we mentioned that there is a path from Arad to Sibiu and back. If the 
+        exception occurs, you will need to get the weight of the nodes in reverse direction (weights[(neighbor, node)])
+    """
     def uniformCostSearch(self, start, goal, graph, weights):
-        """Search the node of least total cost first.
-        Important things to remember
-        1 - Use PriorityQueue with .put() and .get() functions
-        2 - In addition to putting the start or current node in the queue, also put the cost (g(n)) using weights data structure
-        3 - When you're expanding the neighbor of the current you're standing at, get its g(neighbor) by weights[(node, neighbor)] 
-        4 - Calling weights[(node, neighbor)] may throw KeyError exception which is due to the fact that the weights data structure
-            only has one directional weights. In the class, we mentioned that there is a path from Arad to Sibiu and back. If the 
-            exception occurs, you will need to get the weight of the nodes in reverse direction (weights[(neighbor, node)])
-        """
+        expanded: list = []
+        pQueue = PriorityQueue()
+        pQueue.put((0, start, [start]))
 
-        "*** YOUR CODE HERE ***"
+        while pQueue: # while the priority queue has items in it
+            (totalWeight, currentNode, currentNodePath) = pQueue.get() # start expansion of node with lowest total weight for its path
+            if currentNode == goal:
+                return currentNodePath
+            if currentNode not in expanded:
+                expanded.append(currentNode)
+                for neighbor in graph[currentNode]: # from left to right, put neighboring nodes in the priority queue (now with exception catching!)
+                    try:
+                        pQueue.put((totalWeight + weights[(currentNode, neighbor)], neighbor, currentNodePath + [neighbor]))
+                    except:
+                        pQueue.put((totalWeight + weights[(neighbor, currentNode)], neighbor, currentNodePath + [neighbor]))
 
-        # You can delete the line below once you have implemented your solution above
-        return {"Returned solution: [], Expanded cities: []"}
+        return []
 
     def AStar(self, start, goal, graph, weights, heuristic):
         """Search the node that has the lowest combined cost and heuristic first.
