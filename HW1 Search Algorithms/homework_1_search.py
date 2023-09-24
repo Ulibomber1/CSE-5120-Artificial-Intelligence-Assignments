@@ -13,7 +13,7 @@ graph = {'San Bernardino': ['Riverside', 'Rancho Cucamonga'],
     'Arcadia': ['Azusa', 'Los Angeles'],
     'Los Angeles': ['Rancho Cucamonga', 'Ontario', 'Pomona', 'Whittier', 'Arcadia']}
 
-# Weights are treated as g(n) function as we studied in our class lecture which represents the backward cost. 
+# Weights are treated as g(n) function as we studied in our class lecture which represents the total cost. 
 # In the data structure below, the key represents the cost from a source to target node. For example, the first
 # entry shows that there is a cost of 2 for going from San Bernardino to Riverside.
 weights = {('San Bernardino', 'Riverside'): 2,
@@ -31,7 +31,7 @@ weights = {('San Bernardino', 'Riverside'): 2,
     ('Whittier', 'Los Angeles'): 2,
     ('Arcadia', 'Los Angeles'): 2}
 
-# heurist is the h(n) function as we studied in our class lecture which represents the forward cost. 
+# heuristic is the h(n) function as we studied in our class lecture which represents the forward cost. 
 # In the data structure below, each entry represents the h(n) value. For example, the second entry
 # shows that h(Riverside) is 2 (i.e., h value as forward cost for eaching at Riverside assuming that
 # your current/start city is San Bernardino)
@@ -105,10 +105,12 @@ class SearchAlgorithms:
     def uniformCostSearch(self, start, goal, graph, weights):
         expanded: list = []
         pQueue = PriorityQueue()
-        pQueue.put((0, start, [start]))
+
+        # priority queue will sort by totalCost
+        pQueue.put((0, start, [start])) # (total cost, currentNode, path to node)
 
         while pQueue: # while the priority queue has items in it
-            (totalWeight, currentNode, currentNodePath) = pQueue.get() # start expansion of node with lowest total weight for its path
+            (totalWeight, currentNode, currentNodePath) = pQueue.get() # start expansion of node with lowest total weight
             if currentNode == goal:
                 return currentNodePath
             if currentNode not in expanded:
@@ -121,21 +123,38 @@ class SearchAlgorithms:
 
         return []
 
-    def AStar(self, start, goal, graph, weights, heuristic):
-        """Search the node that has the lowest combined cost and heuristic first.
-        Important things to remember
-        1 - Use PriorityQueue with .put() and .get() functions
-        2 - In addition to putting the start or current node in the queue, and the g(n), also put the combined cost (i.e., g(n) + h(n)) 
-            using weights and heuristic data structure
-        3 - When you're expanding the neighbor of the current you're standing at, get its g(neighbor) by weights[(node, neighbor)] 
-        4 - Calling weights[(node, neighbor)] may throw KeyError exception which is due to the fact that the weights data structure
-            only has one directional weights. In the class, we mentioned that there is a path from Arad to Sibiu and back. If the 
-            exception occurs, you will need to get the weight of the nodes in reverse direction (weights[(neighbor, node)])
-        """
-        "*** YOUR CODE HERE ***"
 
-        # You can delete the line below once you have implemented your solution above
-        return {"Returned solution: [], Expanded cities: []"}
+    """
+    Search the node that has the lowest combined cost and heuristic first.
+    Important things to remember
+    1 - Use PriorityQueue with .put() and .get() functions
+    2 - In addition to putting the start or current node in the queue, and the g(n), also put the combined cost (i.e., g(n) + h(n)) 
+        using weights and heuristic data structure
+    3 - When you're expanding the neighbor of the current you're standing at, get its g(neighbor) by weights[(node, neighbor)] 
+    4 - Calling weights[(node, neighbor)] may throw KeyError exception which is due to the fact that the weights data structure
+        only has one directional weights. In the class, we mentioned that there is a path from Arad to Sibiu and back. If the 
+        exception occurs, you will need to get the weight of the nodes in reverse direction (weights[(neighbor, node)])
+    """
+    def AStar(self, start, goal, graph, weights, heuristic):
+        expanded: list = []
+        pQueue = PriorityQueue()
+
+        # priority queue will sort by combinedCost, which is the current node's heuristic + the totalWeight before the current node
+        pQueue.put((0, 0, start, [start])) # (combinedCost, totalWeight, currentNode, CurrentNodePath)
+
+        while pQueue: # while the priority queue has items in it
+            (combinedCost, totalWeight, currentNode, currentNodePath) = pQueue.get() # start expansion of node with lowest combined cost
+            if currentNode == goal:
+                return currentNodePath
+            if currentNode not in expanded:
+                expanded.append(currentNode)
+                for neighbor in graph[currentNode]: # from left to right, put neighboring nodes in the priority queue (now with exception catching!)
+                    try:
+                        pQueue.put((totalWeight + heuristic[neighbor], totalWeight + weights[(currentNode, neighbor)], neighbor, currentNodePath + [neighbor]))
+                    except:
+                        pQueue.put((totalWeight + heuristic[neighbor], totalWeight + weights[(neighbor, currentNode)], neighbor, currentNodePath + [neighbor]))
+       
+        return []
 
 
 # Call to create the object of the above class
