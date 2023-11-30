@@ -1,7 +1,10 @@
 # Import libraries
+from sklearn.svm import LinearSVC
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.datasets import make_classification
 
-
-
+import pickle
 
 # In this section, you can use a search engine to look for the functions that will help you implement the following steps
 
@@ -10,6 +13,7 @@
 # 2. Show what column names exist for the 9 attributes in the dataset
 # 3. Show the distribution of target_class column
 # 4. Show the percentage distribution of target_class column
+
 
 
 
