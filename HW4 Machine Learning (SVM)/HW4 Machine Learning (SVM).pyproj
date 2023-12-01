@@ -5,7 +5,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{90d2664d-d5a7-4a0a-b137-0c56f19ceeb2}</ProjectGuid>
     <ProjectHome />
-    <StartupFile>evaluation.py</StartupFile>
+    <StartupFile>pulsar_classification.py</StartupFile>
     <SearchPath />
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
