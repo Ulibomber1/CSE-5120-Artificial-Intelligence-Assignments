@@ -3,6 +3,7 @@ from sklearn.svm import LinearSVC
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.datasets import make_classification
+from sklearn.model_selection import train_test_split
 
 import pickle
 import pandas as pd
@@ -26,40 +27,30 @@ for entry in pulsarData['target_class']:
     else:
         pos_class += 1
 print(f'\nDistribution:\n Negative: {neg_class} ({(neg_class/len(pulsarData))*100}%)\n Positive: {pos_class} ({(pos_class/len(pulsarData))*100}%)\n')
+
 # Separate predictor variables from the target variable (X and y as we did in the class)
-
-
-
-
-
+X = pulsarData.iloc[:, :-1]
+Y = pulsarData.iloc[:,-1]
 
 # Create train and test splits for model development. Use the 80% and 20% split ratio
 # Name them as X_train, X_test, y_train, and y_test
-X_train = [] # Remove this line after implementing train test split
-X_test = [] # Remove this line after implementing train test split
-
-
-
-
+X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.8)
 
 # Standardize the features (Import StandardScaler here)
-
+sc = StandardScaler()
+X_train = sc.fit_transform(X_train)
+X_test = sc.fit_transform(X_test)
 
 # Below is the code to convert X_train and X_test into data frames for the next steps
 cols = X_train.columns
 X_train = pd.DataFrame(X_train, columns=[cols]) # pd is the imported pandas lirary - Import pandas as pd
 X_test = pd.DataFrame(X_test, columns=[cols]) # pd is the imported pandas lirary - Import pandas as pd
 
-
-
-
-
-
 # Train SVM with the following parameters.
    #    1. RBF kernel
    #    2. C=10.0 (Higher value of C means fewer outliers)
    #    3. gamma = 0.3
-
+classifier = LinearSVC(kernel='rbf', C=10.0, gamma=0.3)
 
 
 
