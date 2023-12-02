@@ -1,5 +1,5 @@
 # Import libraries
-from sklearn.svm import LinearSVC
+from sklearn.svm import SVC
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.datasets import make_classification
@@ -42,7 +42,7 @@ X_train = sc.fit_transform(X_train)
 X_test = sc.fit_transform(X_test)
 
 # Below is the code to convert X_train and X_test into data frames for the next steps
-cols = X_train.columns
+cols = X.columns
 X_train = pd.DataFrame(X_train, columns=[cols]) # pd is the imported pandas lirary - Import pandas as pd
 X_test = pd.DataFrame(X_test, columns=[cols]) # pd is the imported pandas lirary - Import pandas as pd
 
@@ -50,7 +50,8 @@ X_test = pd.DataFrame(X_test, columns=[cols]) # pd is the imported pandas lirary
    #    1. RBF kernel
    #    2. C=10.0 (Higher value of C means fewer outliers)
    #    3. gamma = 0.3
-classifier = LinearSVC(kernel='rbf', C=10.0, gamma=0.3)
+classifier = SVC(kernel='rbf', C=10.0, gamma=0.3)
+classifier.fit(X_train, Y_train)
 
 
 
@@ -60,7 +61,7 @@ classifier = LinearSVC(kernel='rbf', C=10.0, gamma=0.3)
 
 
 # compute and print accuracy score
-
+print(classifier.predict(X_test))
 
 
 
