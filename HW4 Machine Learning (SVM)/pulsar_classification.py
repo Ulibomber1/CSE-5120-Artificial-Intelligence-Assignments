@@ -1,7 +1,6 @@
 # Import libraries
 from sklearn.svm import SVC
 from sklearn.preprocessing import StandardScaler
-from sklearn.datasets import make_classification
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix, accuracy_score
 
@@ -57,8 +56,6 @@ classifier.fit(X_train, Y_train)
 Y_prediction = classifier.predict(X_test)
 
 # compute and print accuracy score
-confusionMatrix = confusion_matrix(Y_test, Y_prediction)
-print(f"\nConfusion Matrix:\n {confusionMatrix}")
 print(f"\nAccuracy:\n{accuracy_score(Y_test, Y_prediction)}")
 
 # Save your SVC model (whatever name you have given your model) as .sav to upload with your submission
