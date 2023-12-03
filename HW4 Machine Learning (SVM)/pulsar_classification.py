@@ -1,9 +1,9 @@
 # Import libraries
 from sklearn.svm import SVC
-from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.datasets import make_classification
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import confusion_matrix, accuracy_score
 
 import pickle
 import pandas as pd
@@ -53,52 +53,40 @@ X_test = pd.DataFrame(X_test, columns=[cols]) # pd is the imported pandas lirary
 classifier = SVC(kernel='rbf', C=10.0, gamma=0.3)
 classifier.fit(X_train, Y_train)
 
-
-
-
 # Test the above developed SVC on unseen pulsar dataset samples
-
-
+Y_prediction = classifier.predict(X_test)
 
 # compute and print accuracy score
-print(classifier.predict(X_test))
-
-
-
-
+confusionMatrix = confusion_matrix(Y_test, Y_prediction)
+print(f"\nConfusion Matrix:\n {confusionMatrix}")
+print(f"\nAccuracy:\n{accuracy_score(Y_test, Y_prediction)}")
 
 # Save your SVC model (whatever name you have given your model) as .sav to upload with your submission
 # You can use the library pickle to save and load your model for this assignment
-
-
-
-
-
-
-
-
+with open('PulsarClassifier.sav', 'wb') as file:
+    pickle.dump(classifier, file)
 
 # Optional: You can print test results of your model here if you want. Otherwise implement them in evaluation.py file
 # Get and print confusion matrix
-cm = [[]]
+#cm = [[]]
 # Below are the metrics for computing classification accuracy, precision, recall and specificity
-TP = cm[0,0]
-TN = cm[1,1]
-FP = cm[0,1]
-FN = cm[1,0]
+#TP = cm[0,0]
+#TN = cm[1,1]
+#FP = cm[0,1]
+#FN = cm[1,0]
 
 
 
 # Compute Precision and use the following line to print it
-precision = 0 # Change this line to implement Precision formula
-print('Precision : {0:0.3f}'.format(precision))
+#precision = 0 # Change this line to implement Precision formula
+#print('Precision : {0:0.3f}'.format(precision))
 
 
 # Compute Recall and use the following line to print it
-recall = 0 # Change this line to implement Recall formula
-print('Recall or Sensitivity : {0:0.3f}'.format(recall))
+#recall = 0 # Change this line to implement Recall formula
+#print('Recall or Sensitivity : {0:0.3f}'.format(recall))
 
 # Compute Specificity and use the following line to print it
-specificity = 0 # Change this line to implement Specificity formula
-print('Specificity : {0:0.3f}'.format(specificity))
+#specificity = 0 # Change this line to implement Specificity formula
+#print('Specificity : {0:0.3f}'.format(specificity))
 

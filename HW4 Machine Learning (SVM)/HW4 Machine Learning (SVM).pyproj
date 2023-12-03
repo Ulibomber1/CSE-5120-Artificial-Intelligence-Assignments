@@ -19,6 +19,7 @@
     <VisualStudioVersion Condition=" '$(VisualStudioVersion)' == '' ">10.0</VisualStudioVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="PulsarClassifier.sav" />
     <Content Include="pulsar_stars.csv" />
   </ItemGroup>
   <ItemGroup>
